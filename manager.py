@@ -1,5 +1,5 @@
-import pygame
 from random import randint
+import pygame
 from pygame.locals import *
 from pygame.time import delay
 from sprites import Tree, Board, Element
@@ -184,20 +184,20 @@ class Manager:
         Element(Element.stop, Element.stop_position).draw(self.screen)
 
         # Draw bricks, ice and animals
-        BrickGroup = pygame.sprite.Group()
-        AnimalGroup = pygame.sprite.Group()
-        IceGroup = pygame.sprite.Group()
+        brick_group = pygame.sprite.Group()
+        animal_group = pygame.sprite.Group()
+        ice_group = pygame.sprite.Group()
         for i in range(0, 21):
             for j in range(0, 21):
                 x, y = Manager.rc_xy(i, j)
                 if self.animal[i][j] != -1:
-                    BrickGroup.add(Element(Element.brick, (x, y)))
-                    AnimalGroup.add(Element(Element.animals[self.animal[i][j]], (x, y)))
+                    brick_group.add(Element(Element.brick, (x, y)))
+                    animal_group.add(Element(Element.animals[self.animal[i][j]], (x, y)))
                 if self.ice_list[i][j] != -1:
-                    IceGroup.add(Element(Element.ice, (x, y)))
-        BrickGroup.draw(self.screen)
-        IceGroup.draw(self.screen)
-        for animallist in AnimalGroup:
+                    ice_group.add(Element(Element.ice, (x, y)))
+        brick_group.draw(self.screen)
+        ice_group.draw(self.screen)
+        for animallist in animal_group:
             self.screen.blit(animallist.image, animallist.rect)
         if self.level == 1:
             self.draw_task(10, 4)
@@ -234,7 +234,7 @@ class Manager:
         self.load_text('Score:' + str(self.score), (300, 550), 30)
         pygame.draw.rect(self.screen, (50, 150, 50, 180), Rect(300, 570, self.score * 2, 25))
         pygame.draw.rect(self.screen, (100, 200, 100, 180), Rect(300, 570, 200, 25), 2)
-        return AnimalGroup
+        return animal_group
 
     def mouse_image(self):
         '''Replace the mouse image with img/mouse.png'''
@@ -414,49 +414,59 @@ class Manager:
         else:
             self.death_sign = True
 
+    # TODO: Merge 4 functions below
     def exists_left(self, i, j, num):
+        '''Checks there are at least {num} continous same animals on the left side of (i, j).'''
         for t in range(0, num):
             if self.animal[i][j] != self.animal[i][j - t] or self.animal[i][j] < 0:
                 return False
         return True
 
     def exists_right(self, i, j, num):
+        '''Checks there are at least {num} continous same animals on the right side of (i, j).'''
         for t in range(0, num):
             if self.animal[i][j] != self.animal[i][j + t] or self.animal[i][j] < 0:
                 return False
         return True
 
     def exists_up(self, i, j, num):
+        '''Checks there are at least {num} continous same animals above (i, j).'''
         for t in range(0, num):
             if self.animal[i][j] != self.animal[i - t][j] or self.animal[i][j] < 0:
                 return False
         return True
 
     def exists_down(self, i, j, num):
+        '''Checks there are at least {num} continous same animals below (i, j).'''
         for t in range(0, num):
             if self.animal[i][j] != self.animal[i + t][j] or self.animal[i][j] < 0:
                 return False
         return True
 
+    # TODO: Merge 4 functions below
     def change_left(self, i, j, num):
+        '''Change the left side of the animal.'''
         self.value_swapped = True
         self.score += num
         for k in range(0, int(num)):
             self.animal[i][j - k] = -2
 
     def change_right(self, i, j, num):
+        '''Change the right side of the animal.'''
         self.value_swapped = True
         self.score += num
         for k in range(0, num):
             self.animal[i][j + k] = -2
 
     def change_up(self, i, j, num):
+        '''Change above the animal.'''
         self.value_swapped = True
         self.score += num
         for k in range(0, num):
             self.animal[i-k][j] = -2
 
     def change_down(self, i, j, num):
+        '''Change below the animal.'''
         self.value_swapped = True
         self.score += num
         for k in range(0, num):
@@ -467,6 +477,7 @@ class Manager:
         self.value_swapped = False
         for i in range(self.row, self.row + self.height):
             for j in range(self.col, self.col + self.width):
+                # TODO: Simplify the if statement below
                 if self.exists_right(i, j, 5):
                     self.value_swapped = True
                     if self.exists_down(i, j+2, 3):
@@ -653,7 +664,7 @@ class Manager:
                     position.append((x, y))
                     if self.ice_list[i][j] == 1:
                         ice_position.append((x, y))
-        if position != []:
+        if position:
             for index in range(0, 9):
                 clock.tick(20)
                 for pos in position:
@@ -686,7 +697,7 @@ class Manager:
                         else:
                             self.animal[m][j] = randint(0, 5)
                             break
-            while speed != [0, 0] and fall_animal_list != []:
+            while speed != [0, 0] and fall_animal_list:
                 for position in brick_position:
                     self.draw_brick(position[0], position[1])
                 for animal_sprite in fall_animal_list:
@@ -695,14 +706,14 @@ class Manager:
                     speed = animal_sprite.speed
                 pygame.display.flip()
 
-    def judgeNext(self, type, score):
+    def judge_next(self, type, score):
         '''Check whether the next level is reached or not'''
         if type == 1: # Passed
-            self.loadFnsWindow(score)
+            self.load_fns_window(score)
         elif type == -1: # Failed
-            self.loadFailWindow()
+            self.load_fail_window()
 
-    def loadFailWindow(self):
+    def load_fail_window(self):
         '''Display the failure board and buttons'''
         sound_sign = 0
         step_add = Board(Board.step_add, Board.button_position[0]) # L: 5 more steps
@@ -719,7 +730,7 @@ class Manager:
                 playSound(Sounds.board_sound)
                 sound_sign = 1
 
-    def loadFnsWindow(self, score):
+    def load_fns_window(self, score):
         '''Display the success board, score and buttons'''
         sound_sign = 0
         replay = Board(Board.replay, Board.button_position[0]) # L: Replay
@@ -908,4 +919,4 @@ class Manager:
                 self.type = 1 # Level 10 passed
                 self.num_add()
 
-        self.judgeNext(self.type, self.score)
+        self.judge_next(self.type, self.score)

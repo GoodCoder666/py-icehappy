@@ -17,37 +17,40 @@ class TreeManager:
     energy_full = False # Energy full mark
     money_empty = False # Not any money left?
 
-    def load_text(self, text, position, txt_size=25, txt_color=(255, 255, 255)):
+    def display_text(self, text, position, txt_size=25, txt_color=(255, 255, 255)):
+        '''Display text with given position, size and color.'''
         my_font = pygame.font.SysFont(None, txt_size)
         text_screen = my_font.render(text, True, txt_color)
         self.screen.blit(text_screen, position)
 
     def draw_tree(self, energy_num, money_num):
+        '''Draws the game tree.'''
         Tree(Tree.tree, (0, 600)).draw(self.screen) # Draw tree
         Tree(Tree.energy_num, Tree.energy_num_position).draw(self.screen) # Draw energy num
         if energy_num > 30:
-            self.load_text(str(30) + '/30', (22, 55), 21)
+            self.display_text(str(30) + '/30', (22, 55), 21)
         else:
-            self.load_text(str(energy_num)+'/30', (22, 55), 21)
+            self.display_text(str(energy_num)+'/30', (22, 55), 21)
         Tree(Tree.money, (15, 135)).draw(self.screen) # Draw money
-        self.load_text(str(money_num), (32, 124), 21)
+        self.display_text(str(money_num), (32, 124), 21)
         for i in range(0, 10): # Draw fruits
             Tree(Tree.fruit, Tree.position[i]).draw(self.screen)
-            self.load_text(str(i+1), (Tree.position[i][0]+15, Tree.position[i][1]-47))
+            self.display_text(str(i+1), (Tree.position[i][0]+15, Tree.position[i][1]-47))
         if self.type == 1:
             Tree(Tree.energy_buy, Tree.energy_buy_position).draw(self.screen)
             if self.energy_full:
-                self.load_text('energy is full!', (430, 310), 30, (255, 0, 0))
+                self.display_text('energy is full!', (430, 310), 30, (255, 0, 0))
                 pygame.display.flip()
                 delay(500)
                 self.energy_full = False
             if self.money_empty:
-                self.load_text('money is not enough!', (410, 310), 30, (255, 0, 0))
+                self.display_text('money is not enough!', (410, 310), 30, (255, 0, 0))
                 pygame.display.flip()
                 delay(500)
                 self.money_empty = False
 
     def mouse_select(self, mgr, mousex, mousey, level, energy_num, money_num):
+        '''Handle mouse event.'''
         if self.type == 0: # Tree Scene
             for i in range(0, 10):
                 if Tree.position[i][0] < mousex < Tree.position[i][0] + self.fruit_width \
@@ -374,7 +377,7 @@ class Manager:
                                          and self.animal[i+2][j] != -1):
                             '''a   b
                                  a
-                                 a 
+                                 a
                                c   d'''
                             self.death_sign = False
                             break

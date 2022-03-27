@@ -1,11 +1,7 @@
-import pygame
+import pygame, sys
 from pygame.locals import KEYDOWN, QUIT, K_q, K_ESCAPE, MOUSEBUTTONDOWN
 from manager import Manager, TreeManager
 from sounds import Sounds
-
-'''brick : 218*218
-   animal : 40*40
-   bg : 850*600 '''
 
 # Initialize game
 pygame.init()
@@ -47,9 +43,9 @@ while True:
     for event in get_events():
         if event.type == KEYDOWN:
             if event.key == K_q or event.key == K_ESCAPE:
-                exit()
+                sys.exit()
         elif event.type == QUIT:
-            exit()
+            sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             mousex, mousey = event.pos
             if m.level == 0:

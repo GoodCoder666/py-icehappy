@@ -9,7 +9,7 @@ class Tree(Sprite):
     energy_num = 'img/energy/num.png'
     money = 'img/money.png'
     energy_buy = 'img/energy/buy.png'
-    
+
     # Positioning
     x, y = 340, 510
     h = 90
@@ -25,6 +25,7 @@ class Tree(Sprite):
         self.rect.bottomleft = position
 
     def draw(self, screen):
+        '''Display the tree on the given screen.'''
         screen.blit(self.image, self.rect)
 
 class Board(Sprite):
@@ -42,7 +43,7 @@ class Board(Sprite):
     stars  = 'img/star.png'
     money  = 'img/money.png'
     energy = 'img/energ.png'
-    
+
     # Positioning
     button_position = [[300, 465], [500, 465]]
     starts_position = [[330, 340], [413, 340], [495, 340]]
@@ -62,6 +63,7 @@ class Board(Sprite):
             self.speed = [0, 0]
 
     def draw(self, screen):
+        '''Display the board on the given screen.'''
         screen.blit(self.image, self.rect)
 
 class Element(Sprite):
@@ -93,6 +95,7 @@ class Element(Sprite):
         self.init_position = position
 
     def move(self, speed):
+        '''Move with given speed.'''
         self.speed = speed
         self.rect = self.rect.move(self.speed)
         if self.speed[0] != 0: # Moving horizontally
@@ -105,4 +108,5 @@ class Element(Sprite):
                 self.speed = [0, 0]
 
     def draw(self, screen):
+        '''Display the element on the given screen.'''
         screen.blit(self.image, self.rect)

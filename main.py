@@ -1,4 +1,5 @@
-import pygame, sys
+import sys
+import pygame
 from pygame.locals import KEYDOWN, QUIT, K_q, K_ESCAPE, MOUSEBUTTONDOWN
 from manager import Manager, TreeManager
 from sounds import Sounds

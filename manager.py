@@ -864,6 +864,7 @@ class Manager:
             self.reset_mode = False
 
     def num_add(self):
+        '''Add to score'''
         if self.num_sign:
             self.money += self.score * 2
             if self.score < self.min:

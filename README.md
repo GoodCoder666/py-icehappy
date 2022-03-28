@@ -1,4 +1,4 @@
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs) ![Python Version](https://img.shields.io/github/pipenv/locked/python-version/metabolize/rq-dashboard-on-heroku)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://goodcoder666.github.io/post/license/) ![Python Version](https://img.shields.io/github/pipenv/locked/python-version/metabolize/rq-dashboard-on-heroku)
 
 # py-icehappy：基于Python3+Pygame制作的开心消消乐小游戏
 

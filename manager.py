@@ -1,9 +1,13 @@
+# -*- encoding: utf-8 -*-
+'''Game manager module.'''
+# pylint: disable=fixme, line-too-long, invalid-name
+# pylint: disable=too-many-branches, too-many-statements
 from random import randint
 import pygame
-from pygame.locals import *
+from pygame.locals import * # pylint: disable=unused-wildcard-import
 from pygame.time import delay
 from sprites import Tree, Board, Element
-from sounds import Sounds, playSound
+from sounds import Sounds, play_sound
 
 class TreeManager:
     '''Tree manager.'''
@@ -61,11 +65,11 @@ class TreeManager:
                         level = i + 1
             if Tree.energy_num_position[0] < mousex < Tree.energy_num_position[0] + 60 \
                     and Tree.energy_num_position[1] - 60 < mousey < Tree.energy_num_position[1]: # 精力60*60
-                playSound(Sounds.click)
+                play_sound(Sounds.CLICK)
                 self.type = 1
         else: # Energy Scene
             if 408 < mousex < 600 and 263 < mousey < 313: # "Buy Energy" button clicked
-                playSound(Sounds.click_button)
+                play_sound(Sounds.CLICK_BUTTON)
                 if money_num < 50:
                     self.money_empty = True
                 if energy_num >= 30:
@@ -289,14 +293,14 @@ class Manager:
                     and self.list_y < mousey < self.list_y + Manager.__brick_size * self.height:
                 mouse_selected = Manager.xy_rc(mousex, mousey)
                 if self.animal[mouse_selected[0]][mouse_selected[1]] != -1:
-                    playSound(Sounds.click)
+                    play_sound(Sounds.CLICK)
                     self.selected = mouse_selected
                     if (self.last_sel[0] == self.selected[0] and abs(self.last_sel[1] - self.selected[1]) == 1) \
                             or (self.last_sel[1] == self.selected[1] and abs(self.last_sel[0] - self.selected[0]) == 1):
                         self.swap_sign = 1 # Valid move, swap
             elif Element.stop_position[0] < mousex < Element.stop_position[0]+self.stop_width\
                     and Element.stop_position[1] < mousey < Element.stop_position[1]+self.stop_width: # Exit button clicked
-                playSound(Sounds.click_button)
+                play_sound(Sounds.CLICK_BUTTON)
                 self.level = 0
                 self.reset_mode = True
             else:
@@ -365,9 +369,9 @@ class Manager:
                                     and self.animal[i][j-1] != -1) or \
                                 (self.animal[i][j] in [self.animal[i-1][j+2], self.animal[i+1][j+2]] \
                                          and self.animal[i][j+2] != -1):
-                            '''a     b
-                                 a a
-                               c     d'''
+                            # a     b
+                            #   a a
+                            # c     d
                             self.death_sign = False
                             break
                     if self.animal[i][j] == self.animal[i+1][j]:
@@ -375,27 +379,27 @@ class Manager:
                                     and self.animal[i-1][j] != -1) or \
                                 (self.animal[i][j] in [self.animal[i+2][j - 1], self.animal[i+2][j + 1]] \
                                          and self.animal[i+2][j] != -1):
-                            '''a   b
-                                 a
-                                 a
-                               c   d'''
+                            # a   b
+                            #   a
+                            #   a
+                            # c   d
                             self.death_sign = False
                             break
                     else:
                         if self.animal[i-1][j-1] == self.animal[i][j]:
                             if (self.animal[i][j] == self.animal[i-1][j+1] and self.animal[i-1][j] != -1)\
                                     or (self.animal[i][j] == self.animal[i+1][j-1] and self.animal[i][j-1] != -1):
-                                '''a   a      a   b
-                                     a          a
-                                   c          a    '''
+                                # a   a      a   b
+                                #   a          a
+                                # c          a
                                 self.death_sign = False
                                 break
                         if self.animal[i][j] == self.animal[i+1][j+1]:
                             if (self.animal[i][j] == self.animal[i-1][j+1] and self.animal[i][j+1] != -1)\
                                     or (self.animal[i][j] == self.animal[i+1][j-1] and self.animal[i+1][j] != -1):
-                                '''    a          b
-                                     a          a
-                                   b   a      a   a'''
+                                #     a          b
+                                #   a          a
+                                # b   a      a   a
                                 self.death_sign = False
                                 break
         if self.death_sign:
@@ -482,141 +486,141 @@ class Manager:
                     self.value_swapped = True
                     if self.exists_down(i, j+2, 3):
                         self.animal_num[self.animal[i][j]] += 7
-                        playSound(Sounds.eliminate_format%5) # Elimination sound 5
+                        Sounds.eliminate(5) # Elimination sound 5
                         self.change_right(i, j, 5)
                         self.change_down(i, j+2, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_right(i, j, 5)
                 elif self.exists_right(i, j, 4):
                     self.value_swapped = True
                     if self.exists_down(i, j+1, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_right(i, j, 4)
                         self.change_down(i, j+1, 3)
                     elif self.exists_down(i, j+2, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_right(i, j, 4)
                         self.change_down(i, j+2, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 4
-                        playSound(Sounds.eliminate_format%2) # Elimination sound 2
+                        Sounds.eliminate(2) # Elimination sound 2
                         self.change_right(i, j, 4)
                 elif self.exists_right(i, j, 3):
                     self.value_swapped = True
                     if self.exists_down(i, j, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_right(i, j, 3)
                         self.change_down(i, j, 3)
                     elif self.exists_down(i, j+1, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_right(i, j, 3)
                         self.change_down(i, j+1, 3)
                     elif self.exists_down(i, j+2, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_right(i, j, 3)
                         self.change_down(i, j + 2, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 3
-                        playSound(Sounds.eliminate_format%1) # Elimination sound 1
+                        Sounds.eliminate(1) # Elimination sound 1
                         self.change_right(i, j, 3)
                 elif self.exists_down(i, j, 5):
                     self.value_swapped = True
                     if self.exists_right(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 7
-                        playSound(Sounds.eliminate_format%5) # Elimination sound 5
+                        Sounds.eliminate(5) # Elimination sound 5
                         self.change_down(i, j, 5)
                         self.change_right(i+2, j, 3)
                     elif self.exists_left(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 7
-                        playSound(Sounds.eliminate_format%5) # Elimination sound 5
+                        Sounds.eliminate(5) # Elimination sound 5
                         self.change_down(i, j, 5)
                         self.change_left(i+2, j, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 5)
                 elif self.exists_down(i, j, 4):
                     self.value_swapped = True
                     if self.exists_left(i+1, j, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 4)
                         self.change_left(i+1, j, 3)
                     elif self.exists_right(i+1, j, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 4)
                         self.change_right(i+1, j, 3)
                     elif self.exists_left(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 4)
                         self.change_left(i+2, j, 3)
                     elif self.exists_right(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 4)
                         self.change_right(i+2, j, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 4
-                        playSound(Sounds.eliminate_format%2) # Elimination sound 2
+                        Sounds.eliminate(2) # Elimination sound 2
                         self.change_down(i, j, 4)
                 elif self.exists_down(i, j, 3):
                     self.value_swapped = True
                     if self.exists_left(i+1, j, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 3)
                         self.change_left(i+1, j, 3)
                     elif self.exists_right(i+1, j, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 3)
                         self.change_right(i+1, j, 3)
                     elif self.exists_left(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 3)
                         self.change_left(i+2, j, 3)
                     elif self.exists_right(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 3)
                         self.change_right(i+2, j, 3)
                     elif self.exists_left(i+2, j, 2) and self.exists_right(i+2, j, 2):
                         self.animal_num[self.animal[i][j]] += 5
-                        playSound(Sounds.eliminate_format%3) # Elimination sound 3
+                        Sounds.eliminate(3) # Elimination sound 3
                         self.change_down(i, j, 3)
                         self.change_left(i+2, j, 2)
                         self.change_right(i+2, j, 2)
                     elif self.exists_left(i+2, j, 2) and self.exists_right(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 3)
                         self.change_left(i+2, j, 2)
                         self.change_right(i+2, j, 3)
                     elif self.exists_left(i+2, j, 3) and self.exists_right(i+2, j, 2):
                         self.animal_num[self.animal[i][j]] += 6
-                        playSound(Sounds.eliminate_format%4) # Elimination sound 4
+                        Sounds.eliminate(4) # Elimination sound 4
                         self.change_down(i, j, 3)
                         self.change_left(i+2, j, 3)
                         self.change_right(i+2, j, 2)
                     elif self.exists_left(i+2, j, 3) and self.exists_right(i+2, j, 3):
                         self.animal_num[self.animal[i][j]] += 7
-                        playSound(Sounds.eliminate_format%5) # Elimination sound 5
+                        Sounds.eliminate(5) # Elimination sound 5
                         self.change_down(i, j, 3)
                         self.change_left(i+2, j, 3)
                         self.change_right(i+2, j, 3)
                     else:
                         self.animal_num[self.animal[i][j]] += 3
-                        playSound(Sounds.eliminate_format%1) # Elimination sound 1
+                        Sounds.eliminate(1) # Elimination sound 1
                         self.change_down(i, j, 3)
 
         self.fall_animal()
@@ -625,34 +629,34 @@ class Manager:
         # Display & speak: good, great, amazing, excellent, unbelievable
         if score_level < 5: return self.value_swapped
         if score_level < 8: # 5 good
-            playSound(Sounds.score_level[0])
+            Sounds.score_level(0)
             Element(Element.score_level[0], (350, 250)).draw(self.screen)
             pygame.display.flip()
             delay(500)
         elif score_level < 10: # 8 great
-            playSound(Sounds.score_level[1])
+            Sounds.score_level(1)
             Element(Element.score_level[1], (350, 250)).draw(self.screen)
             pygame.display.flip()
             delay(500)
         elif score_level < 15: # 10 amazing
-            playSound(Sounds.score_level[2])
+            Sounds.score_level(2)
             Element(Element.score_level[2], (350, 250)).draw(self.screen)
             pygame.display.flip()
             delay(500)
         elif score_level < 20: # 15 excellent
-            playSound(Sounds.score_level[3])
+            Sounds.score_level(3)
             Element(Element.score_level[3], (350, 250)).draw(self.screen)
             pygame.display.flip()
             delay(500)
         elif score_level >= 20: # 20 unbelievable
-            playSound(Sounds.score_level[4])
+            Sounds.score_level(4)
             Element(Element.score_level[4], (350, 250)).draw(self.screen)
             pygame.display.flip()
             delay(500)
 
         return self.value_swapped # Return the swap value sign
 
-    def fall_animal(self):
+    def fall_animal(self): # pylint: disable=too-many-locals
         '''Animation of falling animals'''
         clock = pygame.time.Clock()
         position = []
@@ -681,7 +685,7 @@ class Manager:
                 if self.animal[i][j] == -2:
                     x, y = self.rc_xy(i, j)
                     if self.ice_list[i][j] == 1:
-                        playSound(Sounds.ice_break)
+                        play_sound(Sounds.ICE_BREAKING)
                         self.ice_num += 1
                         self.ice_list[i][j] = -1
 
@@ -727,7 +731,7 @@ class Manager:
             self.fail_board.move()
             pygame.display.flip()
             if sound_sign == 0:
-                playSound(Sounds.board_sound)
+                play_sound(Sounds.BOARD_SOUND)
                 sound_sign = 1
 
     def load_fns_window(self, score):
@@ -745,7 +749,7 @@ class Manager:
             self.success_board.move()
             pygame.display.flip()
             if sound_sign == 0:
-                playSound(Sounds.board_sound)
+                play_sound(Sounds.BOARD_SOUND)
                 sound_sign = 1
         self.displayStars(score) # Display the stars
         # Money

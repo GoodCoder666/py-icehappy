@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+'''Pygame sprites.'''
 from pygame.sprite import Sprite
 from pygame.image import load
 
@@ -13,8 +15,10 @@ class Tree(Sprite):
     # Positioning
     x, y = 340, 510
     h = 90
-    position = ([x, y], [x+50, y-25], [x+105, y-45], [x-5, y-h-5], [x+55, y-25-h+10], [x+105, y-45-h], \
-                [x, y-h*2], [x+50+10, y-25-h*2-5], [x+105+25, y-45-h*2-14], [x+30, y-h*3-30]) # 果子坐标组
+    position = ([x, y], [x+50, y-25], [x+105, y-45], [x-5, y-h-5],
+                [x+55, y-25-h+10], [x+105, y-45-h],
+                [x, y-h*2], [x+50+10, y-25-h*2-5],
+                [x+105+25, y-45-h*2-14], [x+30, y-h*3-30]) # Fruit positions
     energy_num_position = (15, 70) # Energy position
     energy_buy_position = (250, 400) # "Buy energy" position
 
@@ -29,6 +33,7 @@ class Tree(Sprite):
         screen.blit(self.image, self.rect)
 
 class Board(Sprite):
+    '''Wooden boards'''
     # Images
     step_board = 'img/board/step.png'
     num_format = 'img/text/%d.png'
@@ -56,6 +61,7 @@ class Board(Sprite):
         self.rect.bottomleft = position
 
     def move(self):
+        '''Move the board with its speed.'''
         self.rect = self.rect.move(self.speed)
         if self.rect.bottom >= 543:
             self.speed = [0, -45]

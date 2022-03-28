@@ -1,11 +1,19 @@
+# -*- encoding: utf-8 -*-
+'''Main module for the application.'''
+# pylint: disable=invalid-name, wrong-import-position
+
+# Hide pygame's support prompt.
+from os import environ
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
 import sys
 import pygame
-from pygame.locals import KEYDOWN, QUIT, K_q, K_ESCAPE, MOUSEBUTTONDOWN
+from pygame.locals import KEYDOWN, QUIT, K_q, K_ESCAPE, MOUSEBUTTONDOWN # pylint: disable=no-name-in-module
 from manager import Manager, TreeManager
 from sounds import Sounds
 
 # Initialize game
-pygame.init()
+pygame.init() # pylint: disable=no-member
 pygame.mixer.init()
 pygame.display.set_caption('开心消消乐')
 pygame.mouse.set_visible(False)
@@ -13,8 +21,8 @@ pygame.mouse.set_visible(False)
 tree = TreeManager()
 m = Manager(0, 0)
 sound_sign = 0
-world_bgm = pygame.mixer.Sound(Sounds.world_bgm)
-game_bgm = pygame.mixer.Sound(Sounds.game_bgm)
+world_bgm = pygame.mixer.Sound(Sounds.WORLD_BGM.value)
+game_bgm = pygame.mixer.Sound(Sounds.GAME_BGM.value)
 
 # This improves the performance of the game
 get_events, update_window = pygame.event.get, pygame.display.flip
@@ -43,7 +51,7 @@ while True:
 
     for event in get_events():
         if event.type == KEYDOWN:
-            if event.key == K_q or event.key == K_ESCAPE:
+            if event.key in (K_q, K_ESCAPE):
                 sys.exit()
         elif event.type == QUIT:
             sys.exit()

@@ -4,7 +4,7 @@
 # pylint: disable=too-many-branches, too-many-statements
 from random import randint
 import pygame
-from pygame.locals import * # pylint: disable=unused-wildcard-import
+from pygame.locals import * # pylint: disable=wildcard-import, unused-wildcard-import
 from pygame.time import delay
 from sprites import Tree, Board, Element
 from sounds import Sounds, play_sound
@@ -340,7 +340,7 @@ class Manager:
                 pygame.display.flip()
 
             self.swap_values()
-            if self.eliminate_animal():
+            if self.eliminate_animals():
                 self.step -= 1
             else:
                 self.swap_values()
@@ -476,7 +476,8 @@ class Manager:
         for k in range(0, num):
             self.animal[i+k][j] = -2
 
-    def eliminate_animal(self):
+    def eliminate_animals(self):
+        '''Eliminate the animals.'''
         score_level = self.score
         self.value_swapped = False
         for i in range(self.row, self.row + self.height):
@@ -710,11 +711,11 @@ class Manager:
                     speed = animal_sprite.speed
                 pygame.display.flip()
 
-    def judge_next(self, type, score):
+    def judge_next(self, tp, score):
         '''Check whether the next level is reached or not'''
-        if type == 1: # Passed
+        if tp == 1: # Passed
             self.load_fns_window(score)
-        elif type == -1: # Failed
+        elif tp == -1: # Failed
             self.load_fail_window()
 
     def load_fail_window(self):

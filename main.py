@@ -44,7 +44,7 @@ while True:
         m.set_level_mode(m.level)
         sprite_group = m.draw()
         if m.type == 0:
-            m.eliminate_animal()
+            m.eliminate_animals()
             m.death_map()
             m.swap(sprite_group)
         m.judge_level()

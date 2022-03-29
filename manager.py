@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 '''Game manager module.'''
-# pylint: disable=fixme, line-too-long, invalid-name
-# pylint: disable=too-many-branches, too-many-statements
+# pylint: disable=fixme, line-too-long, invalid-name, undefined-variable
+# pylint: disable=too-many-branches, too-many-statements, too-many-arguments
 from random import randint
 import pygame
 from pygame.locals import * # pylint: disable=wildcard-import, unused-wildcard-import
@@ -81,6 +81,7 @@ class TreeManager:
                 self.type = 0
         mgr.level, mgr.energy_num, mgr.money = level, energy_num, money_num
 
+# pylint: disable=too-many-public-methods, too-many-instance-attributes, too-many-nested-blocks
 class Manager:
     '''Game manager.'''
     __screen_size = (900, 600)
@@ -124,9 +125,10 @@ class Manager:
         self.list_x, self.list_y = Manager.rc_xy(self.row, self.col)
         self.ice_list = [[-1 for _ in range(21)] for _ in range(21)]
         self.animal = [[-1 for _ in range(21)] for _ in range(21)]
-        self.reset_animal()
+        self.reset_animals()
 
-    def reset_animal(self):
+    def reset_animals(self):
+        '''Reset board with random animals.'''
         for row in range(self.row, self.row + self.height):
             for col in range(self.col, self.col + self.width):
                 self.animal[row][col] = randint(0, 5)
@@ -145,6 +147,7 @@ class Manager:
 
     @staticmethod
     def draw_brick(x, y):
+        '''Draw a brick at (x, y).'''
         brick = Element(Element.brick, (x, y))
         Manager.screen.blit(brick.image, brick.rect)
 
@@ -355,6 +358,7 @@ class Manager:
         self.animal[xl][yl], self.animal[xc][yc] = self.animal[xc][yc], self.animal[xl][yl]
 
     def load_text(self, text, position, txt_size, txt_color=(255, 255, 255)):
+        '''Display text with given position, size and color.'''
         my_font = pygame.font.SysFont(None, txt_size)
         text_screen = my_font.render(text, True, txt_color)
         self.screen.blit(text_screen, position)
@@ -628,7 +632,8 @@ class Manager:
         score_level = self.score - score_level # Score level
 
         # Display & speak: good, great, amazing, excellent, unbelievable
-        if score_level < 5: return self.value_swapped
+        if score_level < 5:
+            return self.value_swapped
         if score_level < 8: # 5 good
             Sounds.score_level(0)
             Element(Element.score_level[0], (350, 250)).draw(self.screen)

@@ -33,7 +33,7 @@ $ python main.py
 或者
 
 ```shell
-$ pip3 install pygame>=2
+$ pip3 install "pygame>=2"
 $ python -m main
 ```
 

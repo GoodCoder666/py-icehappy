@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 '''Game manager module.'''
-# pylint: disable=fixme, line-too-long, invalid-name, undefined-variable
-# pylint: disable=too-many-branches, too-many-statements, too-many-arguments
+# pylint: disable=fixme, line-too-long, invalid-name, undefined-variable, unnecessary-dunder-call
+# pylint: disable=too-many-branches, too-many-statements, too-many-arguments, too-many-positional-arguments
 from random import randint
 import pygame
 from pygame.locals import * # pylint: disable=wildcard-import, unused-wildcard-import
